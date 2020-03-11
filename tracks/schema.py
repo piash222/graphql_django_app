@@ -20,7 +20,7 @@ class CreateTrack(graphene.Mutation):
 
     class Arguments:
         title = graphene.String(required=True)
-        Description = graphene.String(required=True)
+        description = graphene.String(required=True)
         url = graphene.String(required=True)
 
     def mutate(self, info, title, url, description):
