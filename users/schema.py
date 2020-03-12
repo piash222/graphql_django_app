@@ -1,6 +1,7 @@
 import graphene
 from graphene_django import DjangoObjectType
 from django.contrib.auth import get_user_model
+from graphql import GraphQLError
 
 
 class UserType(DjangoObjectType):
@@ -18,7 +19,7 @@ class Query(graphene.ObjectType):
     def resolve_me(self, info):
         user = info.context.user
         if user.is_anonymous:
-            raise Exception("not logged in")
+            raise GraphQLError("not logged in")
         return user
 
 
@@ -51,7 +52,7 @@ class UpdateUser(graphene.Mutation):
     def mutate(self, info, username='', password='', email=''):
         user = info.context.user
         if user.is_anonymous:
-            raise Exception("not authorized ")
+            raise GraphQLError("not authorized ")
         if username:
             user.username = username
         if email:
@@ -68,7 +69,7 @@ class DeleteUser(graphene.Mutation):
     def mutate(self, info):
         user = info.context.user
         if user.is_anonymous:
-            raise Exception("not authorized ")
+            raise GraphQLError("not authorized ")
         user.delete()
         return DeleteUser(deleted_user=user)
 
